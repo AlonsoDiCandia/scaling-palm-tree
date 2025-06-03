@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  react-app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules  # Evita conflictos con node_modules del host
+    environment:
+      - CHOKIDAR_USEPOLLING=true
