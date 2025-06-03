@@ -1,13 +1,13 @@
 export class Stock {
     name: string;
-    currentPrice: number;
+    price: number;
 
     constructor(name: string, price: number) { 
         this.name = name;
-        this.currentPrice = price;
+        this.price = price;
     }
 
-    updatePrice(price: number) { 
-        this.currentPrice = price;
+    currentPrice(price: number) { 
+        this.price = price;
     }
 }
