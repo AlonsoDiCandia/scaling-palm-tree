@@ -1,16 +1,15 @@
-// App.tsx
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// src/App.tsx
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import AsignarAmountMoney from './pages/AsignarAmountMoney';
 import AsignarPorcentajes from './pages/AsignarPorcentajes';
-import ResumenPortafolio from './pages/ResumenPortafolio';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AsignarPorcentajes />} />
-        <Route path="/resumen" element={<ResumenPortafolio />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<AsignarAmountMoney />} />
+      <Route path="/asignar-porcentajes" element={<AsignarPorcentajes />} />
+    </Routes>
   );
 }
 

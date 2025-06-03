@@ -1,15 +1,21 @@
+// src/pages/AsignarAcciones.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Portfolio } from '../models/Portfolio';
+import { usePortfolio } from '../context/PortfolioContext';
 
 const accionesDisponibles = ["AAPL", "GOOGL", "MSFT", "META", "AMZN"];
 
 function AsignarPorcentajes() {
-  const [portfolio] = useState<Portfolio>(new Portfolio(10000));
+  const { portfolio } = usePortfolio();
+  const navigate = useNavigate();
   const [symbol, setSymbol] = useState('');
   const [percentage, setPercentage] = useState('');
   const [_, setRefresh] = useState(false);
-  const navigate = useNavigate();
+
+  if (!portfolio) {
+    return <p style={{ padding: '2rem' }}>Error: no se encontró el portafolio. Vuelve a la página anterior.</p>;
+  }
 
   const handleAddAllocation = () => {
     const parsed = parseFloat(percentage);
@@ -29,7 +35,7 @@ function AsignarPorcentajes() {
   return (
     <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
       <h1>Portafolio: Asignar porcentajes de las acciones</h1>
-      <h2>Porcentaje disponible: {restante.toFixed(2)} %</h2>
+      <h2>Porcentaje disponible: {restante.toFixed(2)}%</h2>
       <p>Debes asignar el 100% que tengas disponible antes de continuar</p>
 
       <div>
