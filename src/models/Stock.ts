@@ -1,7 +1,7 @@
 export class Stock {
-    name: string;
-    price: number;
-    amount: number
+    public name: string;
+    public price: number;
+    public amount: number
 
     constructor(name: string, price: number, amount: number) { 
         this.name = name;

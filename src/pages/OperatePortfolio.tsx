@@ -8,6 +8,7 @@ function OperatePortfolio() {
   const [buy, setBuy] = useState(false);
   const [index, setIndex] = useState(0);
   const [currentPrices, setCurrentPrices] = useState<Record<string, number> | null>(null);
+  const [rebalance, setRebalance] = useState<{ name: string; action: 'comprar' | 'vender'; amount: number }[]| null>(null);
 
   useEffect(() => {
     if (portfolio && currentPrices && buy) {
@@ -18,16 +19,19 @@ function OperatePortfolio() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (index < data.length) {
+      if (portfolio && index < data.length) {
         setCurrentPrices(data[index]);
         setIndex((prev) => prev + 1);
+        if (currentPrices) {
+          setRebalance(portfolio.rebalance(currentPrices));
+        }
         if (!buy) {
             setBuy(true);
         }
       } else {
         clearInterval(interval);
       }
-    }, 2000); // cada 2 segundos
+    }, 30000); // cada 2 segundos
 
     return () => clearInterval(interval);
   }, [index]);
@@ -43,6 +47,16 @@ function OperatePortfolio() {
               <li key={stock.name}>{stock.amount} {stock.name}: ${stock.price.toFixed(2)}</li>
             ))}
           </ul>
+        </div>
+    )}
+
+    {rebalance && (
+        <div>
+            <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+                {rebalance.map((r, i) => (
+                <li key={r.name + i}>{r.action} {r.amount} acciones de {r.name}</li>
+                ))}
+            </ul>
         </div>
     )}
 

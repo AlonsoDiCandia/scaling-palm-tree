@@ -42,9 +42,30 @@ export class Portfolio {
       }
     
       rebalance(currentPrice: Record<string, number>) {
-        for (const stock in this.stocks) {
-            
+        const operaciones: { name: string; action: 'comprar' | 'vender'; amount: number }[] = [];
+      
+        const totalActual = this.moneyAvaliable;
+      
+        for (const stock of this.stocks) {
+          const precioActual = currentPrice[stock.name];
+          const porcentajeObjetivo = (this.allocated[stock.name] ?? 0) / 100;
+          const valorObjetivo = totalActual * porcentajeObjetivo;
+      
+          const valorActual = stock.amount * precioActual;
+          const diferencia = valorObjetivo - valorActual;
+          const cantidadAjuste = Math.floor(Math.abs(diferencia / precioActual));
+          console.log(stock.name, cantidadAjuste);
+      
+        const newStock = new Stock(stock.name, stock.price, stock.amount);
+        operaciones.push({
+            name: stock.name,
+            action: diferencia > 0 ? 'comprar' : 'vender',
+            amount: cantidadAjuste > 0 ? cantidadAjuste : cantidadAjuste * - 1,
+            });
         }
+      
+        return operaciones;
       }
+      
       
 }
