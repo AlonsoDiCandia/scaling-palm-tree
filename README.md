@@ -1,34 +1,54 @@
-# Instalacion
 
-Para poder revisar este proyecto es necesario el uso de docker. Para levantar el proyecto se debe correr el siguiente comando en una terminal. La terminal debe estar en la carpeta del proyecto.
+# Instalación
 
-```docker compose up -d --build```
+Para revisar este proyecto es necesario tener **Docker** instalado. Para levantar el proyecto, se debe ejecutar el siguiente comando en una terminal ubicada en la carpeta raíz del proyecto:
 
+```bash
+docker compose up -d --build
+```
 
-Luego abrir en un navegador ```localhost:3000```. Para efectos de este desarrollo, no se considero inicio de sesion. 
+Luego, abrir un navegador y acceder a:  
+```http://localhost:3000```
 
-![Pagina de inicio](images/img1.png)
+Para efectos de este desarrollo, **no se consideró un sistema de inicio de sesión**.
 
-Luego se deben seleccionar el porcentaje de acciones que debe contener el portafolio.
+![Página de inicio](images/img1.png)
 
-![Pagina para seleccionar el porcentaje de acciones](images/img2.png)
+A continuación, se debe seleccionar el porcentaje de acciones que debe contener el portafolio.
 
-Se deben seleccionar acciones hasta completar el 100%.
+![Página para seleccionar el porcentaje de acciones](images/img2.png)
+
+Se deben seleccionar acciones hasta completar el **100% del portafolio**.
 
 ![Porcentaje acciones 2](images/img3.png)
 
-Una vez se seleccione el 100% de las acciones podemos avanzar a la siguiente pagina.
+Una vez se haya asignado el 100% de las acciones, se podrá avanzar a la siguiente pantalla.
 
 ![Porcentaje acciones 3](images/img4.png)
 
-En esta pagina podremos ver el precio que actualmente tiene la accion y lo que debemos hacer para mantener el portafolio con los porcentajes que escogimos en la pantalla anterior. 
+En esta página se podrá visualizar el precio actual de cada acción y las operaciones necesarias (compra o venta) para mantener el portafolio balanceado según los porcentajes definidos previamente.
 
 ![Operando](images/img5.png)
 
-En esta pantalla se simula el cambio de precio de las acciones usando de referencia un archivo json que se encuentra dentro de ```src/data/precios_acciones_250s.json```. Usted puede modificar el json para ver el cambio en el precio, pero por motivos de tiempo, las acciones quedaron a fuego en el codigo por lo que para que funcione este desarrollo con su set de datos las acciones deben ser las mismas que se exponen en el json.
+En esta pantalla se simula el cambio de precio de las acciones utilizando como referencia un archivo JSON ubicado en:  
+```src/data/precios_acciones_250s.json```
 
-La logica mas importante para efectos del problema que se expuso se encuentra en ```src/models/Portfolio.ts``` en la funcion ```rebalance``` que se expone a continuacion.
+Puede modificar dicho archivo para observar cómo varían los precios. Sin embargo, **por motivos de tiempo**, las acciones utilizadas quedaron codificadas directamente en el proyecto, por lo que **para que funcione correctamente con su set de datos, las acciones deben coincidir con las del JSON** mencionado.
+
+La lógica principal relacionada con el problema planteado se encuentra en:  
+```src/models/Portfolio.ts```  
+específicamente en la función `rebalance`, que se muestra a continuación:
 
 ![Rebalance](images/img6.png)
 
-Para efectos de esta prueba, comenzamos comprando todas las acciones al primer precio del archivo json, esa es nuestra referencia segun el porcentaje que se escogio, luego cada 2 segundo cambiamos el valor de la accion y con ello debemos hacer el calculo necesario de cuanta variacion del porcentaje del portafolio fue afectado con el cambio de precio. Para hacer el calculo lo primero que hacemos es a nuestras acciones actualizar el precio, una vez que todas las acciones son actualizadas procedemos a obtener la valorizacion del portafolio, con esto podemos obtener el porcentaje actual de la accion en nuestro portafolio y desde ahi comparar con el porcentaje esperado (el que fue seleccionado en la segunda pagina), si nuestra diferencia es positiva, quiere decir que el porcentaje actual de la accion en nuestro portafolio es menor a lo esperado, por ende, debemos comprar. Analogamente, si la diferencia es negativa, debemos vender.
+Para esta prueba, se parte comprando todas las acciones al primer precio disponible en el archivo JSON. Ese es el punto de referencia según el porcentaje seleccionado. Luego, cada 2 segundos se actualiza el precio de las acciones, y con ello se calcula cómo varía el peso porcentual de cada acción dentro del portafolio.
+
+El proceso de cálculo funciona así:
+
+1. Se actualiza el precio de todas las acciones.
+2. Se obtiene la valorización total del portafolio.
+3. A partir de esto, se determina el porcentaje actual de cada acción dentro del portafolio.
+4. Luego, se compara con el porcentaje objetivo definido inicialmente.
+
+- Si la diferencia es **positiva**, significa que el porcentaje actual es menor al esperado → se debe **comprar**.
+- Si la diferencia es **negativa**, el porcentaje actual supera al esperado → se debe **vender**.
