@@ -1,12 +1,11 @@
 // src/pages/AsignarAcciones.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Portfolio } from '../models/Portfolio';
 import { usePortfolio } from '../context/PortfolioContext';
 
 const accionesDisponibles = ["AAPL", "GOOGL", "MSFT", "META", "AMZN"];
 
-function AsignarPorcentajes() {
+function AssignPercentages() {
   const { portfolio } = usePortfolio();
   const navigate = useNavigate();
   const [symbol, setSymbol] = useState('');
@@ -67,7 +66,7 @@ function AsignarPorcentajes() {
       </ul>
 
       {restante <= 0 && (
-        <button onClick={() => navigate('/resumen')}>
+        <button onClick={() => navigate('/operar-portafolio')}>
           Continuar al resumen
         </button>
       )}
@@ -75,4 +74,4 @@ function AsignarPorcentajes() {
   );
 }
 
-export default AsignarPorcentajes;
+export default AssignPercentages;
