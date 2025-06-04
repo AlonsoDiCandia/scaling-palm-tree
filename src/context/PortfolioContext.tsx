@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Portfolio } from '../models/Portfolio';
 
 interface PortfolioContextValue {
@@ -9,7 +9,24 @@ interface PortfolioContextValue {
 const PortfolioContext = createContext<PortfolioContextValue | undefined>(undefined);
 
 export function PortfolioProvider({ children }: { children: ReactNode }) {
-  const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
+  const [portfolio, setPortfolioState] = useState<Portfolio | null>(null);
+
+  // Cargar desde localStorage al iniciar
+  useEffect(() => {
+    const raw = localStorage.getItem('portfolio');
+    if (raw) {
+      const plain = JSON.parse(raw);
+      const p = new Portfolio(plain.moneyAvaliable);
+      p.allocated = plain.allocated;
+      p.stocks = plain.stocks || [];
+      setPortfolioState(p);
+    }
+  }, []);
+
+  const setPortfolio = (p: Portfolio) => {
+    setPortfolioState(p);
+    localStorage.setItem('portfolio', JSON.stringify(p));
+  };
 
   return (
     <PortfolioContext.Provider value={{ portfolio, setPortfolio }}>

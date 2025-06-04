@@ -31,7 +31,7 @@ function OperatePortfolio() {
       } else {
         clearInterval(interval);
       }
-    }, 30000); // cada 2 segundos
+    }, 2000); // cada 2 segundos
 
     return () => clearInterval(interval);
   }, [index]);

@@ -7,6 +7,7 @@ export interface StockAllocation {
 export class Portfolio {
     stocks: Stock[] = [];
     moneyAvaliable: number;
+    valorization: number = 0;
     allocated: StockAllocation = {};
 
     constructor(money: number) {
@@ -40,32 +41,33 @@ export class Portfolio {
           }
         }
       }
+
+      updateStocksPrices(currentPrice: Record<string, number>) {
+        var totalValorization = 0
+        for (const stock of this.stocks) {
+          stock.currentPrice(currentPrice[stock.name]);
+          totalValorization = totalValorization + stock.price;
+        }
+        this.valorization = totalValorization;
+      }
     
       rebalance(currentPrice: Record<string, number>) {
-        const operaciones: { name: string; action: 'comprar' | 'vender'; amount: number }[] = [];
-      
-        const totalActual = this.moneyAvaliable;
-      
+        const operations: { name: string; action: 'comprar' | 'vender'; amount: number }[] = [];
+        
+        this.updateStocksPrices(currentPrice);
+
         for (const stock of this.stocks) {
-          const precioActual = currentPrice[stock.name];
-          const porcentajeObjetivo = (this.allocated[stock.name] ?? 0) / 100;
-          const valorObjetivo = totalActual * porcentajeObjetivo;
-      
-          const valorActual = stock.amount * precioActual;
-          const diferencia = valorObjetivo - valorActual;
-          const cantidadAjuste = Math.floor(Math.abs(diferencia / precioActual));
-          console.log(stock.name, cantidadAjuste);
-      
-        const newStock = new Stock(stock.name, stock.price, stock.amount);
-        operaciones.push({
-            name: stock.name,
-            action: diferencia > 0 ? 'comprar' : 'vender',
-            amount: cantidadAjuste > 0 ? cantidadAjuste : cantidadAjuste * - 1,
-            });
+            const stockValorization = stock.price * stock.amount;
+            const portfolioPercentage = (stockValorization * 100) / this.valorization;
+            console.log(stock.name, portfolioPercentage); 
         }
+        // const newStock = new Stock(stock.name, stock.price, stock.amount);
+        // operations.push({
+        //     name: stock.name,
+        //     action: diferencia > 0 ? 'comprar' : 'vender',
+        //     amount: cantidadAjuste > 0 ? cantidadAjuste : cantidadAjuste * - 1,
+        //     });
       
-        return operaciones;
+        return operations;
       }
-      
-      
 }
