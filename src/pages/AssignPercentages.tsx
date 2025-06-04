@@ -6,7 +6,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 const accionesDisponibles = ["AAPL", "GOOGL", "MSFT", "META", "AMZN"];
 
 function AssignPercentages() {
-  const { portfolio } = usePortfolio();
+  const { portfolio, setPortfolio } = usePortfolio();
   const navigate = useNavigate();
   const [symbol, setSymbol] = useState('');
   const [percentage, setPercentage] = useState('');
@@ -24,6 +24,7 @@ function AssignPercentages() {
     }
 
     portfolio.allocated[symbol] = parsed;
+    setPortfolio(portfolio);
     setSymbol('');
     setPercentage('');
     setRefresh(prev => !prev);

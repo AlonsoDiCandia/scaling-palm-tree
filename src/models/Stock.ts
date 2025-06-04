@@ -12,4 +12,8 @@ export class Stock {
     currentPrice(price: number) { 
         this.price = price;
     }
+
+    currentValorization(): number {
+        return this.amount * this.price;
+    }
 }

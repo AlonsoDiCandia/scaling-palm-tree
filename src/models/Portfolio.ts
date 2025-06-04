@@ -46,7 +46,7 @@ export class Portfolio {
         var totalValorization = 0
         for (const stock of this.stocks) {
           stock.currentPrice(currentPrice[stock.name]);
-          totalValorization = totalValorization + stock.price;
+          totalValorization = totalValorization + stock.currentValorization();
         }
         this.valorization = totalValorization;
       }
@@ -57,16 +57,20 @@ export class Portfolio {
         this.updateStocksPrices(currentPrice);
 
         for (const stock of this.stocks) {
-            const stockValorization = stock.price * stock.amount;
-            const portfolioPercentage = (stockValorization * 100) / this.valorization;
-            console.log(stock.name, portfolioPercentage); 
+            const stockValorization = stock.currentValorization();
+            const portfolioPercentage = Math.floor((stockValorization * 100) / this.valorization);
+            const difference = this.allocated[stock.name] - portfolioPercentage;
+            
+            const money = (difference * this.valorization) / 100;
+            const amountToFix = Math.floor(money / stock.price);
+
+            const newStock = new Stock(stock.name, stock.price, stock.amount);
+            operations.push({
+                name: stock.name,
+                action: difference >= 0 ? 'comprar' : 'vender',
+                amount: difference >= 0 ? amountToFix : amountToFix * - 1,
+            }); 
         }
-        // const newStock = new Stock(stock.name, stock.price, stock.amount);
-        // operations.push({
-        //     name: stock.name,
-        //     action: diferencia > 0 ? 'comprar' : 'vender',
-        //     amount: cantidadAjuste > 0 ? cantidadAjuste : cantidadAjuste * - 1,
-        //     });
       
         return operations;
       }

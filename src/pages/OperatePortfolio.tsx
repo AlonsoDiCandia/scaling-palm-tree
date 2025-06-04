@@ -18,23 +18,26 @@ function OperatePortfolio() {
   
 
   useEffect(() => {
+    if (!portfolio) return;
+  
     const interval = setInterval(() => {
-      if (portfolio && index < data.length) {
+      if (index < data.length) {
         setCurrentPrices(data[index]);
         setIndex((prev) => prev + 1);
         if (currentPrices) {
           setRebalance(portfolio.rebalance(currentPrices));
         }
         if (!buy) {
-            setBuy(true);
+          setBuy(true);
         }
       } else {
         clearInterval(interval);
       }
-    }, 2000); // cada 2 segundos
-
+    }, 2000);
+  
     return () => clearInterval(interval);
-  }, [index]);
+  }, [index, portfolio]); 
+  
 
   return (
     <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
