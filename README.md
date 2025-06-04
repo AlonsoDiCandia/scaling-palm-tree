@@ -1,46 +1,34 @@
-# Getting Started with Create React App
+# Instalacion
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Para poder revisar este proyecto es necesario el uso de docker. Para levantar el proyecto se debe correr el siguiente comando en una terminal. La terminal debe estar en la carpeta del proyecto.
 
-## Available Scripts
+```docker compose up -d --build```
 
-In the project directory, you can run:
 
-### `npm start`
+Luego abrir en un navegador ```localhost:3000```. Para efectos de este desarrollo, no se considero inicio de sesion. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+![Pagina de inicio](images/img1.png)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Luego se deben seleccionar el porcentaje de acciones que debe contener el portafolio.
 
-### `npm test`
+![Pagina para seleccionar el porcentaje de acciones](images/img2.png)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Se deben seleccionar acciones hasta completar el 100%.
 
-### `npm run build`
+![Porcentaje acciones 2](images/img3.png)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Una vez se seleccione el 100% de las acciones podemos avanzar a la siguiente pagina.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![Porcentaje acciones 3](images/img4.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+En esta pagina podremos ver el precio que actualmente tiene la accion y lo que debemos hacer para mantener el portafolio con los porcentajes que escogimos en la pantalla anterior. 
 
-### `npm run eject`
+![Operando](images/img5.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+En esta pantalla se simula el cambio de precio de las acciones usando de referencia un archivo json que se encuentra dentro de ```src/data/precios_acciones_250s.json```. Usted puede modificar el json para ver el cambio en el precio, pero por motivos de tiempo, las acciones quedaron a fuego en el codigo por lo que para que funcione este desarrollo con su set de datos las acciones deben ser las mismas que se exponen en el json.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+La logica mas importante para efectos del problema que se expuso se encuentra en ```src/models/Portfolio.ts``` en la funcion ```rebalance``` que se expone a continuacion.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+![Rebalance](images/img6.png)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Para efectos de esta prueba, comenzamos comprando todas las acciones al primer precio del archivo json, esa es nuestra referencia segun el porcentaje que se escogio, luego cada 2 segundo cambiamos el valor de la accion y con ello debemos hacer el calculo necesario de cuanta variacion del porcentaje del portafolio fue afectado con el cambio de precio. Para hacer el calculo lo primero que hacemos es a nuestras acciones actualizar el precio, una vez que todas las acciones son actualizadas procedemos a obtener la valorizacion del portafolio, con esto podemos obtener el porcentaje actual de la accion en nuestro portafolio y desde ahi comparar con el porcentaje esperado (el que fue seleccionado en la segunda pagina), si nuestra diferencia es positiva, quiere decir que el porcentaje actual de la accion en nuestro portafolio es menor a lo esperado, por ende, debemos comprar. Analogamente, si la diferencia es negativa, debemos vender.

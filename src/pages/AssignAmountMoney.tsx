@@ -5,19 +5,19 @@ import { Portfolio } from '../models/Portfolio';
 import { usePortfolio } from '../context/PortfolioContext';
 
 export default function AsignarAmountMoney() {
-  const [monto, setMonto] = useState('');
+  const [amount, setamount] = useState('');
   const navigate = useNavigate();
   const { setPortfolio } = usePortfolio();
 
   const handleContinuar = () => {
-    const parsed = parseFloat(monto);
+    const parsed = parseFloat(amount);
     if (isNaN(parsed) || parsed <= 0) {
       alert("Ingresa un monto válido mayor a 0");
       return;
     }
 
-    const portafolio = new Portfolio(parsed);
-    setPortfolio(portafolio);
+    const portfolio = new Portfolio(parsed);
+    setPortfolio(portfolio);
     navigate('/asignar-porcentajes');
   };
 
@@ -28,8 +28,8 @@ export default function AsignarAmountMoney() {
         type="number"
         step="0.01"
         placeholder="Monto total del portafolio"
-        value={monto}
-        onChange={(e) => setMonto(e.target.value)}
+        value={amount}
+        onChange={(e) => setamount(e.target.value)}
       />
       <button onClick={handleContinuar}>Continuar</button>
     </div>

@@ -44,8 +44,8 @@ function AssignPercentages() {
           onChange={(e) => setSymbol(e.target.value)}
         >
           <option value="">-- Selecciona una acción --</option>
-          {accionesDisponibles.map((accion) => (
-            <option key={accion} value={accion}>{accion}</option>
+          {accionesDisponibles.map((stock) => (
+            <option key={stock} value={stock}>{stock}</option>
           ))}
         </select>
 
